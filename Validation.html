@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="http://harvesthq.github.io/chosen/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
+    <style>
+       
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="file"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <form id="registrationForm" onsubmit="return validateForm()">
+        <div class="form-group">
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" name="fullName" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="contactNumber">Contact Number:</label>
+            <input type="tel" onkeypress="return isNumberKey(event)" id="contactNumber" maxlength="10" name="contactNumber" pattern="[0-9]*" required>
+        </div>
+
+        <div class="form-group">
+            <label for="panCardNumber">PAN Card Number:</label>
+            <input type="text" id="panCardNumber" name="panCardNumber"  maxlength="10"  required>
+        </div>
+
+        <div class="form-group">
+            <label for="gstNumber">GST Number:</label>
+            <input type="text" id="gstNumber" name="gstNumber"  autocomplete="off" maxlength="15" minlength="15" required>
+        </div>
+
+        <div class="form-group">
+            <label for="country">Country:</label>
+            <select id="country" name="country" aria-placeholder="
+            chosse country" class="chosen-select" >
+                <option value="">Choose Country</option>
+                <option value="United States">United States</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="Afghanistan">Afghanistan</option>
+                <option value="Aland Islands">Aland Islands</option>      
+            </select>
+        </div>
+
+        <div>
+            <label for="image">Upload Your Image </label>
+            <input type="file" id="imageUpload" name="image" accept="image/jpeg, image/png" required>
+        </div>
+        <div>
+            <label for="pdf">Upload Your PDF file</label>
+            <input type="file" id="pdfUpload" name="pdf" accept="application/pdf" required>
+        </div>
+        <div>
+            <label for="word">Upload Your Word</label>
+            <input type="file" id="wordUpload" name="word" accept=".doc, .docx, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <input type="checkbox" onclick="togglePasswordVisibility()">Show Password
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+
+    
+    <script>
+
+        $('.chosen-select').chosen();
+        
+        // Function to toggle password visibility
+        function togglePasswordVisibility() {
+            var passwordField = document.getElementById("password");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+            } else {
+                passwordField.type = "password";
+            }
+        }
+    </script>
+
+    <script>
+        function validateForm(){
+
+            var fullName = document.getElementById('fullName').value;
+            var email = document.getElementById('email').value;
+            var contactNumber = document.getElementById('contactNumber').value;
+            var password = document.getElementById('password').value;
+            var country = document.getElementById('country').value;
+            var gstNumber = document.getElementById('gstNumber').value; 
+            var panCardNumber = document.getElementById('panCardNumber').value;
+
+            //regular expression for all the inputs
+            var nameRegex = /^[a-zA-Z\s]+$/;
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            var contactRegex = /^[6-9]\d{9}$/;
+            var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+            var gstregex = /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d[Z]{1}[A-Z\d]{1}$/;
+            var panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
+
+    
+            if (!fullName.match(nameRegex)) {
+                alert('Please enter a valid full name.');
+                return false;
+            }
+
+            if (!email.match(emailRegex)) {
+                alert('Please enter a valid email address.');
+                return false;
+            }
+    
+            if (!contactNumber.match(contactRegex)) {
+                alert('Please enter a valid contact number.');
+                return false;
+            }
+
+            if(!panCardNumber.match(panRegex))
+            {
+                alert('Please enter a valid PAN number e.g. ABCTY1234D');
+                return false;
+            }
+
+            if (!gstNumber.match(gstregex)) 
+            { 
+                alert('Please enter a valid GST number e.g. 22AAAAA0000A1Z5');
+                return false;
+            }
+   
+            if (!password.match(passwordRegex)) {
+                alert('Password must be at least 8 characters long and contain at least one number, one lowercase and one uppercase letter.');
+                return false;
+            }
+
+            if (country === "") {
+            alert('Please select a country.');
+            return false;
+            }
+
+            return true;
+        }
+
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+</body>
+</html>
+
+
